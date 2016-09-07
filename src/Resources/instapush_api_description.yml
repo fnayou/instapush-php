@@ -1,0 +1,101 @@
+operations:
+    apps:
+        httpMethod: GET
+        uri: /apps/list
+        responseModel: jsonResponse
+        parameters:
+            X-INSTAPUSH-TOKEN:
+                type: string
+                description: "the instapush user token."
+                location: header
+                required: true
+    addApp:
+        httpMethod: POST
+        uri: /apps/add
+        responseModel: jsonResponse
+        parameters:
+            X-INSTAPUSH-TOKEN:
+                type: string
+                description: "the instapush user token."
+                location: header
+                required: true
+            title:
+                type: string
+                location: json
+                description: "the application title."
+                required: true
+    events:
+        httpMethod: GET
+        uri: /events/list
+        responseModel: jsonResponse
+        parameters:
+            X-INSTAPUSH-APPID:
+                type: string
+                description: "the instapush application id."
+                location: header
+                required: true
+            X-INSTAPUSH-APPSECRET:
+                type: string
+                description: "the instapush application secret."
+                location: header
+                required: true
+    addEvent:
+        httpMethod: POST
+        uri: /events/add
+        responseModel: jsonResponse
+        parameters:
+            X-INSTAPUSH-APPID:
+                type: string
+                description: "the instapush application id."
+                location: header
+                required: true
+            X-INSTAPUSH-APPSECRET:
+                type: string
+                description: "the instapush application secret."
+                location: header
+                required: true
+            title:
+                type: string
+                description: "event title."
+                location: json
+                required: true
+            trackers:
+                type: array
+                description: "Parameters you want to use within the event."
+                location: json
+                required: true
+            message:
+                type: string
+                description: "the push message pattern ex: {user} has purchased a {price} package."
+                location: json
+                required: true
+    sendNotification:
+        httpMethod: POST
+        uri: /post
+        responseModel: jsonResponse
+        parameters:
+            X-INSTAPUSH-APPID:
+                type: string
+                description: "the instapush application id."
+                location: header
+                required: true
+            X-INSTAPUSH-APPSECRET:
+                type: string
+                description: "the instapush application secret."
+                location: header
+                required: true
+            event:
+                type: string
+                description: "event title."
+                location: json
+                required: true
+            trackers:
+                type: array
+                description: "Parameters you want to use within the event."
+                location: json
+                required: true
+models:
+    jsonResponse:
+        type: object
+        additionalProperties:
+            location: json
