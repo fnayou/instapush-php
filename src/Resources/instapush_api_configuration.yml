@@ -1,0 +1,14 @@
+# client client config
+client:
+    base_url: 'https://api.instapush.im{+apiVersion}'
+    version: 1
+    defaults:
+        timeout: 10
+        allow_redirects: false
+        headers:
+            user_agent: 'instapush-php/1.0'
+            content_type: 'application/json; charset=utf-8'
+
+# description file path
+description_file_path: '/Resources/instapush_api_description.yml'
+
