@@ -1,0 +1,50 @@
+{
+    "name": "fnayou/instapush-php",
+    "type": "library",
+    "description": "PHP wrapper for Instapush.im APIs",
+    "keywords": [
+        "instapush",
+        "php",
+        "api",
+        "wrapper",
+        "push",
+        "notification"
+    ],
+    "homepage": "https://github.com/fnayou/instapush-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aymen FNAYOU",
+            "email": "fnayou.aymen@gmail.com",
+            "homepage": "http://aymen-fnayou.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6"
+    },
+    "require-dev": {
+        "escapestudios/symfony2-coding-standard": "^2.10",
+        "fnayou/standards": "^1.2",
+        "friendsofphp/php-cs-fixer": "^2.3",
+        "phpunit/phpunit": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fnayou\\Instapush\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fnayou\\Instapush\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias" : {
+            "dev-master" : "1.0.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
