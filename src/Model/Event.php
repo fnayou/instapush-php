@@ -10,6 +10,8 @@
 
 namespace Fnayou\InstapushPHP\Model;
 
+use Fnayou\InstapushPHP\Model\FromArrayInterface;
+
 /**
  * Model Event.
  */

@@ -10,6 +10,8 @@
 
 namespace Fnayou\InstapushPHP\Exception;
 
+use Fnayou\InstapushPHP\Exception\ExceptionInterface;
+
 /**
  * Class TransformerException.
  */
