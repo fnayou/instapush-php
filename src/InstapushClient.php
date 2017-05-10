@@ -10,6 +10,7 @@
 
 namespace Fnayou\InstapushPHP;
 
+use Fnayou\InstapushPHP\HttpClientConfigurator;
 use Fnayou\InstapushPHP\Transformer\ModelTransformer;
 use Fnayou\InstapushPHP\Transformer\TransformerInterface;
 use Http\Client\HttpClient;
@@ -31,9 +32,9 @@ final class InstapushClient
     private $transformer;
 
     /**
-     * @param \Http\Client\HttpClient                                    $httpClient
-     * @param \Http\Message\RequestFactory|null                          $requestFactory
-     * @param \Fnayou\InstapushPHP\Transformer\TransformerInterface|null $transformer
+     * @param \Http\Client\HttpClient                               $httpClient
+     * @param \Http\Message\RequestFactory                          $requestFactory
+     * @param \Fnayou\InstapushPHP\Transformer\TransformerInterface $transformer
      */
     public function __construct(
         HttpClient $httpClient,
@@ -46,20 +47,20 @@ final class InstapushClient
     }
 
     /**
-     * @param \Fnayou\InstapushPHP\HttpClientConfigurator                $httpClientConfigurator
-     * @param \Http\Message\RequestFactory|null                          $requestFactory
-     * @param \Fnayou\InstapushPHP\Transformer\TransformerInterface|null $hydrator
+     * @param \Fnayou\InstapushPHP\HttpClientConfigurator           $httpClientConfigurator
+     * @param \Http\Message\RequestFactory                          $requestFactory
+     * @param \Fnayou\InstapushPHP\Transformer\TransformerInterface $transformer
      *
      * @return $this
      */
     public static function configure(
         HttpClientConfigurator $httpClientConfigurator,
         RequestFactory $requestFactory = null,
-        TransformerInterface $hydrator = null
+        TransformerInterface $transformer = null
     ) {
         $httpClient = $httpClientConfigurator->createConfiguredClient();
 
-        return new static($httpClient, $hydrator, $requestFactory);
+        return new static($httpClient, $requestFactory, $transformer);
     }
 
     /**

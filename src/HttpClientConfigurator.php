@@ -20,7 +20,7 @@ use Http\Message\UriFactory;
 /**
  * Configure an HTTP client.
  */
-final class HttpClientConfigurator
+class HttpClientConfigurator
 {
     const USER_AGENT = 'fnayou/instapush-php';
 
@@ -55,18 +55,18 @@ final class HttpClientConfigurator
     private $httpClient;
 
     /**
-     * @var \Http\Client\Common\Plugin[]
+     * @var array
      */
     private $prependPlugins = [];
 
     /**
-     * @var \Http\Client\Common\Plugin[]
+     * @var array
      */
     private $appendPlugins = [];
 
     /**
-     * @param \Http\Client\HttpClient|null  $httpClient
-     * @param \Http\Message\UriFactory|null $uriFactory
+     * @param \Http\Client\HttpClient  $httpClient
+     * @param \Http\Message\UriFactory $uriFactory
      */
     public function __construct(HttpClient $httpClient = null, UriFactory $uriFactory = null)
     {
@@ -80,7 +80,7 @@ final class HttpClientConfigurator
     public function createConfiguredClient()
     {
         $plugins = $this->prependPlugins;
-        $plugins[] = new Plugin\AddHostPlugin($this->uriFactory->createUri($this->endpoint));
+        $plugins[] = new Plugin\AddHostPlugin($this->uriFactory->createUri($this->getEndpoint()));
 
         $plugins[] = new Plugin\HeaderDefaultsPlugin([
             'User-Agent' => static::USER_AGENT,
@@ -90,6 +90,14 @@ final class HttpClientConfigurator
         ]);
 
         return new PluginClient($this->httpClient, array_merge($plugins, $this->appendPlugins));
+    }
+
+    /**
+     * @return string
+     */
+    public function getEndpoint()
+    {
+        return $this->endpoint;
     }
 
     /**
@@ -121,9 +129,9 @@ final class HttpClientConfigurator
     }
 
     /**
-     * @param Plugin $plugin
+     * @param \Http\Client\Common\Plugin ...$plugin
      *
-     * @return HttpClientConfigurator
+     * @return $this
      */
     public function appendPlugin(Plugin ...$plugin)
     {
@@ -135,15 +143,15 @@ final class HttpClientConfigurator
     }
 
     /**
-     * @param Plugin $plugin
+     * @param \Http\Client\Common\Plugin ...$plugin
      *
-     * @return HttpClientConfigurator
+     * @return $this
      */
     public function prependPlugin(Plugin ...$plugin)
     {
-        $plugin = array_reverse($plugin);
+        $plugin = \array_reverse($plugin);
         foreach ($plugin as $p) {
-            array_unshift($this->prependPlugins, $p);
+            \array_unshift($this->prependPlugins, $p);
         }
 
         return $this;

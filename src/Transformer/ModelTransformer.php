@@ -12,7 +12,6 @@ namespace Fnayou\InstapushPHP\Transformer;
 
 use Fnayou\InstapushPHP\Exception\TransformerException;
 use Fnayou\InstapushPHP\Model\FromArrayInterface;
-use Fnayou\InstapushPHP\Transformer\TransformerInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -47,7 +46,7 @@ class ModelTransformer implements TransformerInterface
         }
 
         $reflection = new \ReflectionClass($class);
-        if (true == $reflection->implementsInterface('FromArrayInterface')) {
+        if (true === $reflection->implementsInterface('FromArrayInterface')) {
             $object = \call_user_func($class.'::fromArray', $data);
         } else {
             $object = new $class($data);
