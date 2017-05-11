@@ -8,11 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Fnayou\InstapushPHP\Exception;
+namespace Fnayou\InstapushPHP\Http;
 
 /**
- * Class TransformerException.
+ * Interface HttpClientConfiguratorInterface.
  */
-class TransformerException extends \RuntimeException implements ExceptionInterface
+interface HttpClientConfiguratorInterface
 {
+    /** @return \Http\Client\HttpClient */
+    public function createConfiguredClient();
 }

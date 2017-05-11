@@ -38,12 +38,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Fnayou\\Instapush\\": "src"
+            "Fnayou\\InstapushPHP\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Fnayou\\Instapush\\Test\\": "tests"
+            "Fnayou\\InstapushPHP\\Test\\": "tests"
         }
     },
     "extra": {

@@ -11,7 +11,6 @@
 namespace Fnayou\InstapushPHP\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Fnayou\InstapushPHP\Model\FromArrayInterface;
 
 /**
  * Model Events.

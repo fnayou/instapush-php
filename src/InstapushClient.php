@@ -10,7 +10,8 @@
 
 namespace Fnayou\InstapushPHP;
 
-use Fnayou\InstapushPHP\HttpClientConfigurator;
+use Fnayou\InstapushPHP\Http\HttpClientConfigurator;
+use Fnayou\InstapushPHP\Http\HttpClientConfiguratorInterface;
 use Fnayou\InstapushPHP\Transformer\ModelTransformer;
 use Fnayou\InstapushPHP\Transformer\TransformerInterface;
 use Http\Client\HttpClient;
@@ -47,14 +48,14 @@ final class InstapushClient
     }
 
     /**
-     * @param \Fnayou\InstapushPHP\HttpClientConfigurator           $httpClientConfigurator
-     * @param \Http\Message\RequestFactory                          $requestFactory
-     * @param \Fnayou\InstapushPHP\Transformer\TransformerInterface $transformer
+     * @param \Fnayou\InstapushPHP\Http\HttpClientConfiguratorInterface $httpClientConfigurator
+     * @param \Http\Message\RequestFactory                              $requestFactory
+     * @param \Fnayou\InstapushPHP\Transformer\TransformerInterface     $transformer
      *
      * @return $this
      */
     public static function configure(
-        HttpClientConfigurator $httpClientConfigurator,
+        HttpClientConfiguratorInterface $httpClientConfigurator,
         RequestFactory $requestFactory = null,
         TransformerInterface $transformer = null
     ) {
@@ -70,11 +71,70 @@ final class InstapushClient
      *
      * @return $this
      */
-    public static function create(string $userToken, string $appIdentifier, string $appSecret)
+    public static function create(string $userToken = null, string $appIdentifier = null, string $appSecret = null)
     {
         $httpClientConfigurator = new HttpClientConfigurator();
-        $httpClientConfigurator->setApiCredentials($userToken, $appIdentifier, $appSecret);
+        $httpClientConfigurator
+            ->setApiUserToken($userToken)
+            ->setApiAppIdentifier($appIdentifier)
+            ->setApiAppSecret($appSecret);
 
         return static::configure($httpClientConfigurator);
+    }
+
+    /**
+     * @return \Http\Client\HttpClient
+     */
+    public function getHttpClient()
+    {
+        return $this->httpClient;
+    }
+
+    /**
+     * @param \Http\Client\HttpClient $httpClient
+     */
+    public function setHttpClient(HttpClient $httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    /**
+     * @return \Http\Message\RequestFactory
+     */
+    public function getRequestFactory()
+    {
+        return $this->requestFactory;
+    }
+
+    /**
+     * @param \Http\Message\RequestFactory $requestFactory
+     */
+    public function setRequestFactory(RequestFactory $requestFactory)
+    {
+        $this->requestFactory = $requestFactory;
+    }
+
+    /**
+     * @return \Fnayou\InstapushPHP\Transformer\TransformerInterface
+     */
+    public function getTransformer()
+    {
+        return $this->transformer;
+    }
+
+    /**
+     * @param \Fnayou\InstapushPHP\Transformer\TransformerInterface $transformer
+     */
+    public function setTransformer(TransformerInterface $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+
+    /**
+     * @return Api\ApplicationsApi
+     */
+    public function applications()
+    {
+        return new Api\ApplicationsApi($this);
     }
 }
