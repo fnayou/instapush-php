@@ -11,7 +11,7 @@
 namespace Fnayou\InstapushPHP\Transformer;
 
 use Fnayou\InstapushPHP\Exception\TransformerException;
-use Fnayou\InstapushPHP\Model\FromArrayInterface;
+use Fnayou\InstapushPHP\Transformer\TransformerInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
