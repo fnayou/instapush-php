@@ -32,6 +32,9 @@ final class InstapushClient
     /** @var \Fnayou\InstapushPHP\Transformer\TransformerInterface */
     private $transformer;
 
+    /** @var bool */
+    private $exception = true;
+
     /**
      * @param \Http\Client\HttpClient                               $httpClient
      * @param \Http\Message\RequestFactory                          $requestFactory
@@ -128,6 +131,22 @@ final class InstapushClient
     public function setTransformer(TransformerInterface $transformer)
     {
         $this->transformer = $transformer;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isException()
+    {
+        return $this->exception;
+    }
+
+    /**
+     * @param bool $exception
+     */
+    public function setException(bool $exception)
+    {
+        $this->exception = $exception;
     }
 
     /**
