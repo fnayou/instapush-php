@@ -1,11 +1,19 @@
 <?php
+/**
+ * This file is part of the fnayou/instapush-php project.
+ *
+ * Copyright (c) 2017. Aymen FNAYOU <fnayou.aymen@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Fnayou\InstapushPHP\Model;
 
 /**
- * Class Error.
+ * Class ApiError.
  */
-class Error implements FromArrayInterface
+class ApiError implements FromArrayInterface
 {
     /** @var string */
     private $message;
@@ -37,7 +45,7 @@ class Error implements FromArrayInterface
     /**
      * @param string $message
      *
-     * @return $this;
+     * @return $this
      */
     public function setMessage(string $message)
     {

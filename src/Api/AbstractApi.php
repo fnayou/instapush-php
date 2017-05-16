@@ -12,7 +12,8 @@ namespace Fnayou\InstapushPHP\Api;
 
 use Fnayou\InstapushPHP\Exception\ApiException;
 use Fnayou\InstapushPHP\InstapushClient;
-use Fnayou\InstapushPHP\Model\Error;
+use Fnayou\InstapushPHP\Model\ApiError;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -22,6 +23,9 @@ abstract class AbstractApi
 {
     /** @var \Fnayou\InstapushPHP\InstapushClient */
     protected $instapushClient;
+
+    /** @var \Psr\Http\Message\RequestInterface */
+    protected $request;
 
     /**
      * @param \Fnayou\InstapushPHP\InstapushClient $instapushClient
@@ -48,6 +52,22 @@ abstract class AbstractApi
     }
 
     /**
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    protected function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param \Psr\Http\Message\RequestInterface $request
+     */
+    protected function setRequest(RequestInterface $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
      * @param \Psr\Http\Message\ResponseInterface $response
      * @param string                              $class
      *
@@ -61,8 +81,8 @@ abstract class AbstractApi
         }
 
         // handle exception
-        if (200 !== $response->getStatusCode() || 201 !== $response->getStatusCode()) {
-            $this->handleException($response);
+        if (200 !== $response->getStatusCode() && 201 !== $response->getStatusCode()) {
+            return $this->handleException($response);
         }
 
         // transform response according to class
@@ -87,6 +107,8 @@ abstract class AbstractApi
             ->getRequestFactory()
             ->createRequest('GET', $path, $headers);
 
+        $this->setRequest($request);
+
         return $this->instapushClient->getHttpClient()->sendRequest($request);
     }
 
@@ -97,28 +119,31 @@ abstract class AbstractApi
      */
     protected function handleException(ResponseInterface $response)
     {
-        if (false === $this->getInstapushClient()->isException()) {
-            return $this->getInstapushClient()->getTransformer()->transform($response, Error::class);
-        }
-
-        if (0 !== \strpos($response->getHeaderLine('Content-Type'), 'application/json')) {
+        if (true !== $response->hasHeader('Content-Type')
+            || 'application/json' !== $response->getHeaderLine('Content-Type')
+        ) {
             throw new ApiException(
                 \sprintf(
                     'Waiting for json response but %s given',
                     $response->getHeaderLine('Content-Type')
                 ),
-                500
+                $this->getRequest(),
+                $response
             );
+        }
+
+        if (false === $this->getInstapushClient()->isHandleException()) {
+            return $this->getInstapushClient()->getTransformer()->transform($response, ApiError::class);
         }
 
         $content = \json_decode($response->getBody()->getContents(), true);
 
-        if (true === isset($content['message'])) {
-            $message = $content['message'];
+        if (true === isset($content['msg'])) {
+            $message = $content['msg'];
         } else {
-            $message = 'An unexpected/unknown error occurred.';
+            $message = 'An unexpected/unknown error occurred : '.$content;
         }
 
-        throw new ApiException($message, $response->getStatusCode(), $response);
+        throw new ApiException($message, $this->getRequest(), $response);
     }
 }

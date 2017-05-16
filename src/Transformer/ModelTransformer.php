@@ -24,16 +24,7 @@ class ModelTransformer implements TransformerInterface
      */
     public function transform(ResponseInterface $response, string $class)
     {
-        if (0 !== \strpos($response->getHeaderLine('Content-Type'), 'application/json')) {
-            throw new TransformerException(
-                \sprintf(
-                    'The ModelTransformer can transform json response but %s given',
-                    $response->getHeaderLine('Content-Type')
-                )
-            );
-        }
-
-        $body = $response->getBody()->__toString();
+        $body = $response->getBody()->getContents();
         $data = \json_decode($body, true);
 
         if (JSON_ERROR_NONE !== \json_last_error()) {

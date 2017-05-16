@@ -33,7 +33,7 @@ final class InstapushClient
     private $transformer;
 
     /** @var bool */
-    private $exception = true;
+    private $handleException = true;
 
     /**
      * @param \Http\Client\HttpClient                               $httpClient
@@ -136,17 +136,17 @@ final class InstapushClient
     /**
      * @return bool
      */
-    public function isException()
+    public function isHandleException()
     {
-        return $this->exception;
+        return $this->handleException;
     }
 
     /**
-     * @param bool $exception
+     * @param bool $handleException
      */
-    public function setException(bool $exception)
+    public function setHandleException(bool $handleException)
     {
-        $this->exception = $exception;
+        $this->handleException = $handleException;
     }
 
     /**
