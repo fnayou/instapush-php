@@ -10,6 +10,9 @@
 
 namespace Fnayou\InstapushPHP\Test;
 
+use Fnayou\InstapushPHP\Model\Application;
+use GuzzleHttp\Psr7\Response;
+
 /**
  * Class FakeParameters.
  */
@@ -95,6 +98,30 @@ class FakeParameters
                 'trackerOne' => 'valueOne',
                 'trackerTwo' => 'valueTwo',
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getModelTransformerParameters()
+    {
+        $responseWithWrongBody = new Response(
+            200,
+            [],
+            "full wrong fake body"
+        );
+
+        $responseWithCorrectBody = new Response(
+            200,
+            [],
+            \json_encode(static::getApplicationParameters())
+        );
+
+        return [
+            'withWrongBody' => $responseWithWrongBody,
+            'withCorrectBody' => $responseWithCorrectBody,
+            'correctClass' => Application::class,
         ];
     }
 }

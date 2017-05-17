@@ -163,7 +163,6 @@ abstract class AbstractApi
      */
     protected function transformResponse(string $class = null)
     {
-        // handle exception
         if (200 !== $this->getResponse()->getStatusCode()
             && 201 !== $this->getResponse()->getStatusCode()
         ) {
