@@ -27,8 +27,9 @@ class Notification implements FromArrayInterface
      */
     public function __construct(string $event, array $trackers)
     {
-        $this->event = $event;
-        $this->trackers = $trackers;
+        $this
+            ->setEvent($event)
+            ->setTrackers($trackers);
     }
 
     /**
@@ -41,10 +42,14 @@ class Notification implements FromArrayInterface
 
     /**
      * @param string $event
+     *
+     * @return $this
      */
     public function setEvent(string $event)
     {
         $this->event = $event;
+
+        return $this;
     }
 
     /**
@@ -57,10 +62,14 @@ class Notification implements FromArrayInterface
 
     /**
      * @param array $trackers
+     *
+     * @return $this
      */
     public function setTrackers(array $trackers)
     {
         $this->trackers = $trackers;
+
+        return $this;
     }
 
     /**
@@ -69,5 +78,16 @@ class Notification implements FromArrayInterface
     public static function fromArray(array $data)
     {
         return new static($data['event'], $data['trackers']);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'event' => $this->getEvent(),
+            'trackers' => $this->getTrackers(),
+        ];
     }
 }

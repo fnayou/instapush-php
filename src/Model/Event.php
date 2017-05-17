@@ -31,9 +31,10 @@ class Event implements FromArrayInterface
      */
     public function __construct(string $title, string $message, array $trackers)
     {
-        $this->title = $title;
-        $this->trackers = $trackers;
-        $this->message = $message;
+        $this
+            ->setTitle($title)
+            ->setMessage($message)
+            ->setTrackers($trackers);
     }
 
     /**
@@ -46,10 +47,14 @@ class Event implements FromArrayInterface
 
     /**
      * @param string $title
+     *
+     * @return $this
      */
     public function setTitle(string $title)
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -62,10 +67,14 @@ class Event implements FromArrayInterface
 
     /**
      * @param string $message
+     *
+     * @return $this
      */
     public function setMessage(string $message)
     {
         $this->message = $message;
+
+        return $this;
     }
 
     /**
@@ -78,10 +87,14 @@ class Event implements FromArrayInterface
 
     /**
      * @param array $trackers
+     *
+     * @return $this
      */
     public function setTrackers(array $trackers)
     {
         $this->trackers = $trackers;
+
+        return $this;
     }
 
     /**
@@ -90,5 +103,17 @@ class Event implements FromArrayInterface
     public static function fromArray(array $data)
     {
         return new static($data['title'], $data['message'], $data['trackers']);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'title' => $this->getTitle(),
+            'message' => $this->getMessage(),
+            'trackers' => $this->getTrackers(),
+        ];
     }
 }

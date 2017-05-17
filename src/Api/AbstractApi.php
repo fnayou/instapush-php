@@ -22,10 +22,13 @@ use Psr\Http\Message\ResponseInterface;
 abstract class AbstractApi
 {
     /** @var \Fnayou\InstapushPHP\InstapushClient */
-    protected $instapushClient;
+    private $instapushClient;
 
     /** @var \Psr\Http\Message\RequestInterface */
-    protected $request;
+    private $request;
+
+    /** @var \Psr\Http\Message\ResponseInterface */
+    private $response;
 
     /**
      * @param \Fnayou\InstapushPHP\InstapushClient $instapushClient
@@ -38,55 +41,61 @@ abstract class AbstractApi
     /**
      * @return \Fnayou\InstapushPHP\InstapushClient
      */
-    protected function getInstapushClient()
+    public function getInstapushClient()
     {
         return $this->instapushClient;
     }
 
     /**
-     * @param \Fnayou\InstapushPHP\InstapushClient $instapushClient
-     */
-    protected function setInstapushClient(InstapushClient $instapushClient)
-    {
-        $this->instapushClient = $instapushClient;
-    }
-
-    /**
      * @return \Psr\Http\Message\RequestInterface
      */
-    protected function getRequest()
+    public function getRequest()
     {
         return $this->request;
     }
 
     /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param \Fnayou\InstapushPHP\InstapushClient $instapushClient
+     *
+     * @return $this
+     */
+    protected function setInstapushClient(InstapushClient $instapushClient)
+    {
+        $this->instapushClient = $instapushClient;
+
+        return $this;
+    }
+
+    /**
      * @param \Psr\Http\Message\RequestInterface $request
+     *
+     * @return $this
      */
     protected function setRequest(RequestInterface $request)
     {
         $this->request = $request;
+
+        return $this;
     }
 
     /**
      * @param \Psr\Http\Message\ResponseInterface $response
-     * @param string                              $class
      *
-     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @return $this
      */
-    protected function transformResponse(ResponseInterface $response, $class)
+    protected function setResponse(ResponseInterface $response)
     {
-        // return \GuzzleHttp\Psr7\Response
-        if (!$this->getInstapushClient()->getTransformer()) {
-            return $response;
-        }
+        $this->response = $response;
 
-        // handle exception
-        if (200 !== $response->getStatusCode() && 201 !== $response->getStatusCode()) {
-            return $this->handleException($response);
-        }
-
-        // transform response according to class
-        return $this->getInstapushClient()->getTransformer()->transform($response, $class);
+        return $this;
     }
 
     /**
@@ -94,7 +103,7 @@ abstract class AbstractApi
      * @param array  $parameters
      * @param array  $headers
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return $this
      */
     protected function doGet(string $path, array $parameters = [], array $headers = [])
     {
@@ -109,15 +118,94 @@ abstract class AbstractApi
 
         $this->setRequest($request);
 
-        return $this->instapushClient->getHttpClient()->sendRequest($request);
+        $response = $this
+            ->getInstapushClient()
+            ->getHttpClient()
+            ->sendRequest($request);
+
+        $this->setResponse($response);
+
+        return $this;
     }
 
     /**
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param string $path
+     * @param array  $parameters
+     * @param array  $headers
+     *
+     * @return $this
+     */
+    protected function doPost(string $path, array $parameters = [], array $headers = [])
+    {
+        $body = \json_encode($parameters);
+
+        $request = $this
+            ->getInstapushClient()
+            ->getRequestFactory()
+            ->createRequest('POST', $path, $headers, $body);
+
+        $this->setRequest($request);
+
+        $response = $this
+            ->getInstapushClient()
+            ->getHttpClient()
+            ->sendRequest($request);
+
+        $this->setResponse($response);
+
+        return $this;
+    }
+
+    /**
+     * @param string $class
      *
      * @return mixed
      */
-    protected function handleException(ResponseInterface $response)
+    protected function transformResponse(string $class = null)
+    {
+        // handle exception
+        if (200 !== $this->getResponse()->getStatusCode()
+            && 201 !== $this->getResponse()->getStatusCode()
+        ) {
+            return $this->handleException();
+        }
+
+        if (null === $this->getInstapushClient()->getTransformer() || null === $class) {
+            return \json_decode($this->getResponse()->getBody()->getContents(), true);
+        }
+
+        return $this->getInstapushClient()->getTransformer()->transform($this->getResponse(), $class);
+    }
+
+    /**
+     * @throws \Fnayou\InstapushPHP\Exception\ApiException
+     *
+     * @return \Fnayou\InstapushPHP\Model\ApiError
+     */
+    protected function handleException()
+    {
+        $this->handleNotJsonException($this->getResponse());
+
+        if (false === $this->getInstapushClient()->isHandleException()) {
+            return $this
+                ->getInstapushClient()
+                ->getTransformer()
+                ->transform($this->getResponse(), ApiError::class);
+        }
+
+        $content = \json_decode($this->getResponse()->getBody()->__toString(), true);
+
+        $message = true === isset($content['msg']) ? $content['msg'] : 'An unexpected error occurred : '.$content;
+
+        throw new ApiException($message, $this->getRequest(), $this->getResponse());
+    }
+
+    /**
+     * @param ResponseInterface $response
+     *
+     * @throws \Fnayou\InstapushPHP\Exception\ApiException
+     */
+    protected function handleNotJsonException(ResponseInterface $response)
     {
         if (true !== $response->hasHeader('Content-Type')
             || 'application/json' !== $response->getHeaderLine('Content-Type')
@@ -131,19 +219,5 @@ abstract class AbstractApi
                 $response
             );
         }
-
-        if (false === $this->getInstapushClient()->isHandleException()) {
-            return $this->getInstapushClient()->getTransformer()->transform($response, ApiError::class);
-        }
-
-        $content = \json_decode($response->getBody()->getContents(), true);
-
-        if (true === isset($content['msg'])) {
-            $message = $content['msg'];
-        } else {
-            $message = 'An unexpected/unknown error occurred : '.$content;
-        }
-
-        throw new ApiException($message, $this->getRequest(), $response);
     }
 }

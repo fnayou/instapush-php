@@ -24,7 +24,7 @@ class ModelTransformer implements TransformerInterface
      */
     public function transform(ResponseInterface $response, string $class)
     {
-        $body = $response->getBody()->getContents();
+        $body = $response->getBody()->__toString();
         $data = \json_decode($body, true);
 
         if (JSON_ERROR_NONE !== \json_last_error()) {

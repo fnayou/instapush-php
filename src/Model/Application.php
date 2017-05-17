@@ -73,7 +73,7 @@ class Application implements FromArrayInterface
      *
      * @return $this
      */
-    public function setAppId(string $appId)
+    public function setAppId(string $appId = null)
     {
         $this->appId = $appId;
 
@@ -93,7 +93,7 @@ class Application implements FromArrayInterface
      *
      * @return $this
      */
-    public function setAppSecret(string $appSecret)
+    public function setAppSecret(string $appSecret = null)
     {
         $this->appSecret = $appSecret;
 
@@ -110,5 +110,17 @@ class Application implements FromArrayInterface
             $data['appID'],
             $data['appSecret']
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'title' => $this->getTitle(),
+            'appID' => $this->getAppId(),
+            'appSecret' => $this->getAppSecret(),
+        ];
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Fnayou\InstapushPHP\Api;
 
+use Fnayou\InstapushPHP\Model\Application;
 use Fnayou\InstapushPHP\Model\Applications;
 
 /**
@@ -18,12 +19,32 @@ use Fnayou\InstapushPHP\Model\Applications;
 class ApplicationsApi extends AbstractApi
 {
     /**
-     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @return \Fnayou\InstapushPHP\Model\Applications
      */
     public function list()
     {
-        $response = $this->doGet('/apps/list');
+        $applicationsApi = $this->doGet('/apps/list');
 
-        return $this->transformResponse($response, Applications::class);
+        // full absurdity
+        if ('null' === $applicationsApi->getResponse()->getBody()->__toString()) {
+            return new Applications();
+        }
+
+        return $this->transformResponse(Applications::class);
+    }
+
+    /**
+     * @param \Fnayou\InstapushPHP\Model\Application $application
+     *
+     * @return \Fnayou\InstapushPHP\Model\Application
+     */
+    public function add(Application $application)
+    {
+        $this->doPost('/apps/add', $application->toArray());
+
+        /** @var \Fnayou\InstapushPHP\Model\Applications $applications */
+        $applications = $this->list();
+
+        return $applications->last();
     }
 }

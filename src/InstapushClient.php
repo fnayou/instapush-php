@@ -86,6 +86,36 @@ final class InstapushClient
     }
 
     /**
+     * @param string $userToken
+     *
+     * @return $this
+     */
+    public static function createForUser(string $userToken)
+    {
+        $httpClientConfigurator = new HttpClientConfigurator();
+        $httpClientConfigurator
+            ->setApiUserToken($userToken);
+
+        return static::configure($httpClientConfigurator);
+    }
+
+    /**
+     * @param string $appIdentifier
+     * @param string $appSecret
+     *
+     * @return $this
+     */
+    public static function createForApp(string $appIdentifier, string $appSecret)
+    {
+        $httpClientConfigurator = new HttpClientConfigurator();
+        $httpClientConfigurator
+            ->setApiAppIdentifier($appIdentifier)
+            ->setApiAppSecret($appSecret);
+
+        return static::configure($httpClientConfigurator);
+    }
+
+    /**
      * @return \Http\Client\HttpClient
      */
     public function getHttpClient()
@@ -155,5 +185,21 @@ final class InstapushClient
     public function applications()
     {
         return new Api\ApplicationsApi($this);
+    }
+
+    /**
+     * @return Api\EventsApi
+     */
+    public function events()
+    {
+        return new Api\EventsApi($this);
+    }
+
+    /**
+     * @return Api\NotificationApi
+     */
+    public function notification()
+    {
+        return new Api\NotificationApi($this);
     }
 }
