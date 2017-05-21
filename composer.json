@@ -5,6 +5,7 @@
     "keywords": [
         "instapush",
         "php",
+        "sdk",
         "api",
         "wrapper",
         "push",
@@ -22,9 +23,9 @@
     ],
     "require": {
         "php": ">=5.6",
+        "doctrine/collections": "^1.4",
         "guzzlehttp/psr7": "^1.4",
         "php-http/client-common": "^1.5",
-        "php-http/curl-client": "^1.7",
         "php-http/discovery": "^1.2",
         "php-http/httplug": "^1.1",
         "php-http/message": "^1.5",
