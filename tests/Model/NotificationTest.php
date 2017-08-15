@@ -13,11 +13,12 @@ namespace Fnayou\InstapushPHP\Test\Model;
 use Fnayou\InstapushPHP\Model\FromArrayInterface;
 use Fnayou\InstapushPHP\Model\Notification;
 use Fnayou\InstapushPHP\Test\FakeParameters;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class NotificationTest.
  */
-final class NotificationTest extends \PHPUnit_Framework_TestCase
+final class NotificationTest extends TestCase
 {
     /**
      * test implement FromArrayInterface.

@@ -13,11 +13,12 @@ namespace Fnayou\InstapushPHP\Test\Model;
 use Fnayou\InstapushPHP\Model\Event;
 use Fnayou\InstapushPHP\Model\FromArrayInterface;
 use Fnayou\InstapushPHP\Test\FakeParameters;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class EventTest.
  */
-final class EventTest extends \PHPUnit_Framework_TestCase
+final class EventTest extends TestCase
 {
     /**
      * test implement FromArrayInterface.

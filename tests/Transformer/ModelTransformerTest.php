@@ -15,11 +15,12 @@ use Fnayou\InstapushPHP\Model\Application;
 use Fnayou\InstapushPHP\Test\FakeParameters;
 use Fnayou\InstapushPHP\Transformer\ModelTransformer;
 use Fnayou\InstapushPHP\Transformer\TransformerInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ModelTransformerTest.
  */
-final class ModelTransformerTest extends \PHPUnit_Framework_TestCase
+final class ModelTransformerTest extends TestCase
 {
     /**
      * test implement TransformerInterface.
@@ -32,7 +33,7 @@ final class ModelTransformerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test bad json response should throw exception
+     * test bad json response should throw exception.
      */
     public function testBadJsonResponseShouldThrowException()
     {
@@ -48,7 +49,7 @@ final class ModelTransformerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test bad json response should throw exception
+     * test bad json response should throw exception.
      */
     public function testCorrectParametersShouldSuccess()
     {

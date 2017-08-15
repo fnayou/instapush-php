@@ -13,11 +13,12 @@ namespace Fnayou\InstapushPHP\Test\Model;
 use Fnayou\InstapushPHP\Model\ApiError;
 use Fnayou\InstapushPHP\Model\FromArrayInterface;
 use Fnayou\InstapushPHP\Test\FakeParameters;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ApiErrorTest.
  */
-final class ApiErrorTest extends \PHPUnit_Framework_TestCase
+final class ApiErrorTest extends TestCase
 {
     /**
      * test implement FromArrayInterface.

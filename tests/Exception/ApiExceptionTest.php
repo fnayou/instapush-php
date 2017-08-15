@@ -13,11 +13,12 @@ namespace Fnayou\InstapushPHP\Test\Exception;
 use Fnayou\InstapushPHP\Exception\ApiException;
 use Fnayou\InstapushPHP\Exception\ExceptionInterface;
 use Http\Client\Exception\HttpException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ApiExceptionTest.
  */
-final class ApiExceptionTest extends \PHPUnit_Framework_TestCase
+final class ApiExceptionTest extends TestCase
 {
     /**
      * test implement ExceptionInterface.
