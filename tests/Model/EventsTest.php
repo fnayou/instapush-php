@@ -15,11 +15,12 @@ use Fnayou\InstapushPHP\Model\Event;
 use Fnayou\InstapushPHP\Model\Events;
 use Fnayou\InstapushPHP\Model\FromArrayInterface;
 use Fnayou\InstapushPHP\Test\FakeParameters;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class EventsTest.
  */
-final class EventsTest extends \PHPUnit_Framework_TestCase
+final class EventsTest extends TestCase
 {
     /**
      * test implement FromArrayInterface.

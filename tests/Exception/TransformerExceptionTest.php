@@ -12,11 +12,12 @@ namespace Fnayou\InstapushPHP\Test\Exception;
 
 use Fnayou\InstapushPHP\Exception\ExceptionInterface;
 use Fnayou\InstapushPHP\Exception\TransformerException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class TransformerExceptionTest.
  */
-final class TransformerExceptionTest extends \PHPUnit_Framework_TestCase
+final class TransformerExceptionTest extends TestCase
 {
     /**
      * test implement ExceptionInterface.

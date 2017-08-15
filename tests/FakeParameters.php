@@ -109,7 +109,7 @@ class FakeParameters
         $responseWithWrongBody = new Response(
             200,
             [],
-            "full wrong fake body"
+            'full wrong fake body'
         );
 
         $responseWithCorrectBody = new Response(

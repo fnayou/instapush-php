@@ -15,11 +15,12 @@ use Fnayou\InstapushPHP\Model\Application;
 use Fnayou\InstapushPHP\Model\Applications;
 use Fnayou\InstapushPHP\Model\FromArrayInterface;
 use Fnayou\InstapushPHP\Test\FakeParameters;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ApplicationsTest.
  */
-final class ApplicationsTest extends \PHPUnit_Framework_TestCase
+final class ApplicationsTest extends TestCase
 {
     /**
      * test implement FromArrayInterface.
