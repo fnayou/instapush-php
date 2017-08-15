@@ -18,7 +18,7 @@ use Http\Client\Common\PluginClient;
  */
 class HttpClientConfigurator extends AbstractHttpClientConfigurator implements HttpClientConfiguratorInterface
 {
-    const USER_AGENT = 'fnayou/instapush-php';
+    const USER_AGENT = 'fnayou/instapush-php-v1';
 
     /**
      * @var string
